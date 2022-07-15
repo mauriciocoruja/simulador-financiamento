@@ -51,7 +51,8 @@ def gerar_dados(valor_financiamento: float,
     :param amortizacao: Volor médio de amortizações mensais
     :return: Lista de tuplas com as informações geradas
     """
-    amortizacao_financiamento = calcular_amortizacao(quantidade_parcelas, valor_financiamento)
+    amortizacao_financiamento = calcular_amortizacao(
+        quantidade_parcelas, valor_financiamento)
     dados = []
     amortizacao_adicional = amortizacao
 
@@ -156,7 +157,8 @@ def gerar_tabela_meses(dados_calculados: list,
 
     index = list(f for f in configurar_meses(dados_formatados, start))
     df = pd.DataFrame(dados_formatados,
-                      columns=['Parcela', 'Amortização', 'Amortização adicional', 'Juros', 'Saldo Devedor'],
+                      columns=['Parcela', 'Amortização',
+                               'Amortização adicional', 'Juros', 'Saldo Devedor'],
                       index=index)
     return df.to_string(index=True)
 
@@ -209,13 +211,29 @@ def criar_arquivo(conteudo: str):
 
 
 def main():
-    valor_financiamento = float(input("Insira o valor Financiado: "))
-    taxa_juros = float(input("Insira a taxa de juros: "))
-    prazo = int(input("Insira o prazo para pagamento: "))
-    amortizacao_adicional = float(input("Caso queira amortizar adicionalmente, insira a media mensal: "))
-    dados = gerar_dados(valor_financiamento, taxa_juros, prazo, amortizacao_adicional)
-
-    print(gerar_tabela_parcela(dados))
+    step: int = 0
+    while True:
+        try:
+            if step == 0:
+                valor_financiamento = float(
+                    input("Insira o valor Financiado: "))
+                step = 1
+            if step == 1:
+                taxa_juros = float(input("Insira a taxa de juros: "))
+                step = 2
+            if step == 2:
+                prazo = int(input("Insira o prazo para pagamento: "))
+                step = 3
+            if step == 3:
+                amortizacao_adicional = float(
+                    input("Caso queira amortizar adicionalmente, insira a media mensal: "))
+                dados = gerar_dados(valor_financiamento, taxa_juros,
+                                    prazo, amortizacao_adicional)
+                print(gerar_tabela_parcela(dados))
+            break
+        except ValueError:
+            print("Por favor, informe um número inteiro ou decimal")
+    exit(0)
 
 
 if __name__ == '__main__':
