@@ -174,13 +174,18 @@ def gerar_tabela_parcela(dados_calculados: list) -> str:
         dados_formatados.append([formatar_valor(j) for j in i])
 
     df = pd.DataFrame(dados_formatados,
-                      columns=['Parcela', 'Amortização', 'Amortização adicional', 'Juros', 'Saldo Devedor']).shift()[1:]
+                      columns=[
+                          'Parcela', 'Amortização',
+                          'Amortização adicional',
+                          'Juros', 'Saldo Devedor'
+                      ]).shift()[1:]
 
-    return df.to_string(index=True)
+    return df.to_string()
 
 
 def configurar_meses(dados: list,
-                     start: str = datetime.strftime(datetime.now(), "%m/%y")) -> list[str]:
+                     start: str = datetime.strftime(datetime.now(), "%m/%y")
+                     ) -> list[str]:
     """Criar lista com range de datas formatadas
 
     :param dados: dados do financiamento calculado.
@@ -206,17 +211,3 @@ def formatar_valor(valor) -> str:
 def criar_arquivo(conteudo: str):
     with open("simulacao_financiamento.html", "w") as f:
         f.writelines(conteudo)
-
-
-def main():
-    valor_financiamento = float(input("Insira o valor Financiado: "))
-    taxa_juros = float(input("Insira a taxa de juros: "))
-    prazo = int(input("Insira o prazo para pagamento: "))
-    amortizacao_adicional = float(input("Caso queira amortizar adicionalmente, insira a media mensal: "))
-    dados = gerar_dados(valor_financiamento, taxa_juros, prazo, amortizacao_adicional)
-
-    print(gerar_tabela_parcela(dados))
-
-
-if __name__ == '__main__':
-    main()
