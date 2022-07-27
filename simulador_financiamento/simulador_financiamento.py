@@ -67,8 +67,9 @@ def calcular_amortizacao(quantidade_parcelas: int, valor_emprestimo: float) -> f
 def gerar_dados(valor_financiamento: float,
                 taxa_juros: float,
                 quantidade_parcelas: int,
-                amortizacao: float = 0) -> list:
-    """
+                amortizacao: float = 0) -> list[tuple]:
+    """Gera/calcula os dadas do financiamento
+
     :param valor_financiamento: Valor total do financiamento
     :param taxa_juros: Taxa de juros (valor decimal)
     :param quantidade_parcelas: Total de parcelas do financiamento
@@ -161,12 +162,12 @@ def adicionar_dados(valor_parcela: float,
                     dados_financiamento: list) -> None:
     """ Adiciona em uma lista todos os dados necessarios para montar a tabela com a simulação do financiamento
 
-    :param valor_parcela:
-    :param amortizacao_financiamento:
-    :param amortizacao_adicional:
-    :param juros:
-    :param valor_financiamento:
-    :param dados_financiamento:
+    :param valor_parcela: valor da parcela do financiamento.
+    :param amortizacao_financiamento: valor da amortização do financiamento.
+    :param amortizacao_adicional: valor adicional de amortização do financimento.
+    :param juros: valor valor dos juros do financiamento.
+    :param valor_financiamento: valor total financiado.
+    :param dados_financiamento: lista com os dados calculados do financiamento.
     :return: none
 
     **Examples**
@@ -185,11 +186,11 @@ def adicionar_dados(valor_parcela: float,
 
 
 def gerar_tabela_meses(dados_calculados: list,
-                       start: str = datetime.strftime(datetime.now(), "%m/%y")) -> str:
-    """Gerar dados a partir de uma lista de dados
+                       data_inicio: str = datetime.strftime(datetime.now(), "%m/%y")) -> str:
+    """Gerar uma representação em forma de tabela a partir de uma lista de dados, onde o index informa os meses de pagamento do financiamento.
 
-    :param dados_calculados:
-    :param start:
+    :param dados_calculados: lista com os dados das parcelas do financiamento.
+    :param data_inicio: mês e ano do início do financiamento.
     :return: Conteudo do dataframe como string
 
     **Examples**
@@ -211,9 +212,9 @@ def gerar_tabela_meses(dados_calculados: list,
 
 
 def gerar_tabela_parcela(dados_calculados: list) -> str:
-    """Gerar uma representação em forma de tabela a partir de uma lista de dados do financiamento
+    """Gerar uma representação em forma de tabela a partir de uma lista de dados, onde o index informa o número de parcelas do financiamento.
 
-    :param dados_calculados:
+    :param dados_calculados: lista com os dados das parcelas do financiamento.
     :return: Conteudo do dataframe como string
 
     **Examples**
@@ -245,7 +246,7 @@ def configurar_meses(dados: list,
     """Criar lista com range de datas formatadas
 
     :param dados: dados do financiamento calculado.
-    :param start: data de inicio do pagamento do financiamento, e estimar o fim do financiamento
+    :param data_inicio: data de início do pagamento do financiamento.
     :return: lista de datas no formato m/a (07/22)
 
     **Examples**
