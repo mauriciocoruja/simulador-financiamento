@@ -104,12 +104,6 @@ def gerar_dados(valor_financiamento: float,
                 dados
             )
 
-            adicionar_dados(calcular_totais(dados)[0],
-                            calcular_totais(dados)[1],
-                            calcular_totais(dados)[2],
-                            calcular_totais(dados)[3],
-                            0,
-                            dados)
             break
 
         adicionar_dados(
@@ -119,18 +113,12 @@ def gerar_dados(valor_financiamento: float,
             juros,
             valor_financiamento,
             dados)
-
-    adicionar_dados(calcular_totais(dados)[0],
-                    calcular_totais(dados)[1],
-                    calcular_totais(dados)[2],
-                    calcular_totais(dados)[3],
-                    0,
-                    dados)
+    # TODO: Adicionar total em um dataframe separado e concatatenar tendo um index 'total'
 
     return dados
 
 
-def calcular_totais(dados: list) -> tuple:
+def calcular_totais(dados: list[tuple]) -> tuple:
     """Calcula o total pago individualmente nas parcelas, juros e amortizações.
 
     :param dados: lista com os dados do financiamento calculados.
@@ -159,7 +147,7 @@ def adicionar_dados(valor_parcela: float,
                     amortizacao_adicional: float,
                     juros: float,
                     valor_financiamento: float,
-                    dados_financiamento: list) -> None:
+                    dados_financiamento: list[tuple]) -> None:
     """ Adiciona em uma lista todos os dados necessarios para montar a tabela com a simulação do financiamento
 
     :param valor_parcela: valor da parcela do financiamento.
@@ -185,7 +173,7 @@ def adicionar_dados(valor_parcela: float,
          valor_financiamento))
 
 
-def gerar_tabela_meses(dados_calculados: list,
+def gerar_tabela_meses(dados_calculados: list[tuple],
                        data_inicio: str = datetime.strftime(datetime.now(), "%m/%y")) -> str:
     """Gerar uma representação em forma de tabela a partir de uma lista de dados, onde o index informa os meses de pagamento do financiamento.
 
@@ -204,14 +192,14 @@ def gerar_tabela_meses(dados_calculados: list,
     for i in dados_calculados:
         dados_formatados.append([formatar_valor(j) for j in i])
 
-    index = list(f for f in configurar_meses(dados_formatados, start))
+    index = list(f for f in configurar_meses(dados_formatados, data_inicio))
     df = pd.DataFrame(dados_formatados,
                       columns=['Parcela', 'Amortização', 'Amortização adicional', 'Juros', 'Saldo Devedor'],
                       index=index)
     return df.to_string(index=True)
 
 
-def gerar_tabela_parcela(dados_calculados: list) -> str:
+def gerar_tabela_parcela(dados_calculados: list[tuple]) -> str:
     """Gerar uma representação em forma de tabela a partir de uma lista de dados, onde o index informa o número de parcelas do financiamento.
 
     :param dados_calculados: lista com os dados das parcelas do financiamento.
@@ -235,13 +223,14 @@ def gerar_tabela_parcela(dados_calculados: list) -> str:
                           'Parcela', 'Amortização',
                           'Amortização adicional',
                           'Juros', 'Saldo Devedor'
-                      ]).shift()[1:]
+                      ],
+                      index=pd.RangeIndex(start=1, stop=len(dados_formatados) + 1))
 
     return df.to_string()
 
 
-def configurar_meses(dados: list,
-                     start: str = datetime.strftime(datetime.now(), "%m/%y")
+def configurar_meses(dados: list[tuple],
+                     data_inicio: str = datetime.strftime(datetime.now(), "%m/%y")
                      ) -> list[str]:
     """Criar lista com range de datas formatadas
 
@@ -254,12 +243,12 @@ def configurar_meses(dados: list,
     >>> configurar_meses(list(e for e in range(2)), '07/22')
     ['07/22', '08/22']
     """
-    start_strptime = datetime.strptime(start, "%m/%y")
+    start_strptime = datetime.strptime(data_inicio, "%m/%y")
     return [e.strftime("%m/%y") for e in
             list(rrule.rrule(rrule.MONTHLY, count=len(dados), dtstart=start_strptime))]
 
 
-def formatar_valor(valor) -> str:
+def formatar_valor(valor: float) -> str:
     """Formatar os valores para o formato brasileiro (000.000,00)
 
     :param valor: valor a ser formatado
@@ -274,6 +263,6 @@ def formatar_valor(valor) -> str:
     return locale.format_string("%.2f", valor, grouping=True)
 
 
-def criar_arquivo(conteudo: str):
+def criar_arquivo(conteudo: str) -> None:
     with open("simulacao_financiamento.html", "w") as f:
         f.writelines(conteudo)
