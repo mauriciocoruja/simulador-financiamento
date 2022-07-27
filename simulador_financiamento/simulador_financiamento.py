@@ -199,7 +199,7 @@ def gerar_tabela_meses(dados_calculados: list[tuple],
     df = pd.DataFrame(dados_formatados,
                       columns=['Parcela', 'Amortização', 'Amortização adicional', 'Juros', 'Saldo Devedor'],
                       index=index)
-    return df.to_string(index=True)
+    return df
 
 
 def gerar_tabela_parcela(dados_calculados: list[tuple]) -> str:
@@ -229,7 +229,7 @@ def gerar_tabela_parcela(dados_calculados: list[tuple]) -> str:
                       ],
                       index=pd.RangeIndex(start=1, stop=len(dados_formatados) + 1))
 
-    return df.to_string()
+    return df
 
 
 def configurar_meses(dados: list[tuple],

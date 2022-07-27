@@ -19,11 +19,10 @@ def main():
                 step = 3
             if step == 3:
                 amortizacao_adicional = float(input("Caso queira amortizar adicionalmente, insira a media mensal: "))
-                print(type(amortizacao_adicional))
                 dados = sf.gerar_dados(
                     valor_financiamento, taxa_juros,
                     prazo, amortizacao_adicional)
-                print(sf.gerar_tabela_parcela(dados))
+                return sf.gerar_tabela_parcela(dados)
         except ValueError:
             print("Por favor, informe um número inteiro ou decimal")
         else:
@@ -35,4 +34,4 @@ if __name__ == '__main__':
     import doctest
 
     doctest.testmod(sf)
-    main()
+    print(main())
