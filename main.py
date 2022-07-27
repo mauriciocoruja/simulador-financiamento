@@ -18,8 +18,8 @@ def main():
                     input("Insira o prazo para pagamento: "))
                 step = 3
             if step == 3:
-                amortizacao_adicional = float(
-                    input("Caso queira amortizar adicionalmente, insira a media mensal: "))
+                amortizacao_adicional = float(input("Caso queira amortizar adicionalmente, insira a media mensal: "))
+                print(type(amortizacao_adicional))
                 dados = sf.gerar_dados(
                     valor_financiamento, taxa_juros,
                     prazo, amortizacao_adicional)
