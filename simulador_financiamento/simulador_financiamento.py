@@ -1,3 +1,6 @@
+"""
+Métodos para gerar os dados do financiamento
+"""
 import locale
 from datetime import datetime
 
