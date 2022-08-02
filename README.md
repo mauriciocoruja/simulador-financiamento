@@ -40,7 +40,7 @@ Alternativa 1:
     do comando
 
 
-    $ pip install -r requirements.txt
+      $ pip install -r requirements.txt
 
 [//]: # (Alternativa 2)
 
@@ -55,7 +55,7 @@ Alternativa 1:
 - Na pasta raiz do projeto execute o comando no terminal:
  
  
-    $ pydoc simulador_financiamento/simulador_financiamento 
+      $ pydoc simulador_financiamento/simulador_financiamento 
   para visualizar a documentação no terminal; ou execute o comando ```pydoc -b``` para iniciar um servidor web local e 
   visualizar a documentação em uma página web.
 
